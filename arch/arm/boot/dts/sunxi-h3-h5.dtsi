@@ -90,6 +90,14 @@
 			clock-output-names = "osc24M";
 		};
 
+		osc8M: osc8M_clk {
+			#clock-cells = <0>;
+			compatible = "fixed-clock";
+			clock-frequency = <8000000>;
+			clock-accuracy = <50000>;
+			clock-output-names = "osc8M";
+		};
+
 		osc32k: osc32k_clk {
 			#clock-cells = <0>;
 			compatible = "fixed-clock";
@@ -654,9 +662,19 @@
 			pinctrl-names = "default";
 			pinctrl-0 = <&spi0_pins>;
 			resets = <&ccu RST_BUS_SPI0>;
-			status = "disabled";
+			status = "okay";
 			#address-cells = <1>;
 			#size-cells = <0>;
+
+			mcp25625: can@0 {
+				compatible = "microchip,mcp25625";
+				reg = <0>;
+				clocks = <&osc8M>;
+				interrupt-parent = <&pio>;
+				interrupts = <GIC_SPI 7 IRQ_TYPE_EDGE_FALLING>;
+				spi-max-frequency = <10000000>;
+				status = "okay";
+			};
 		};
 
 		spi1: spi@1c69000 {
